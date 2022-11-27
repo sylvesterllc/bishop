@@ -19,7 +19,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@sylvesterllc'
-      - run: npm ci
+      - run: npm i
       - run: git config user.email "davis@sylvesterllc.com"
       - run: git config user.name "Davis Sylvester III"
       - run: npm run publish:lib
