@@ -1,8 +1,6 @@
-import { AccountType } from "../enums/AccountType";
+import { AccountType } from "../enums/AccountType.mjs";
 
 export interface CreateUserModel {
-
-    username: string;
     email: string;
     firstName: string;
     lastName: string;

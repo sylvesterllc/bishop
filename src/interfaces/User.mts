@@ -1,6 +1,6 @@
-import { AccountStatus } from "../enums/AccountStatus";
-import { AccountType } from "../enums/AccountType";
-import { CreateUserModel } from "../models/CreateUserModel";
+import { AccountStatus } from "../enums/AccountStatus.mjs";
+import { AccountType } from "../enums/AccountType.mjs";
+import { CreateUserModel } from "../models/CreateUserModel.mjs";
 
 export interface User extends CreateUserModel {
     username: string;
@@ -11,7 +11,8 @@ export interface User extends CreateUserModel {
     password: string;
     accountType: AccountType;
     emailVerified: boolean;
-    createdOn: Date;
+    createdOn: string;
+    createOnTS: number;
     active: boolean;
     status: AccountStatus;
 }

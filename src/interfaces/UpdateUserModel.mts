@@ -1,4 +1,4 @@
-import { UserCustoms } from "./UserCustoms";
+import { UserCustoms } from "./UserCustoms.mjs";
 
 export interface UpdateUserModel {
     token: string;

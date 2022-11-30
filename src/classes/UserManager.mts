@@ -2,16 +2,16 @@ import {
     AdminDeleteUserCommand, AdminDeleteUserCommandInput, AdminGetUserCommand, AdminGetUserCommandInput, AuthFlowType, ChangePasswordCommand, ChangePasswordCommandInput, CognitoIdentityProviderClient, CognitoIdentityProviderClientConfig, ConfirmSignUpCommand, ConfirmSignUpCommandInput, GetUserCommand, GetUserCommandInput, InitiateAuthCommand, ListUsersCommand,
     ListUsersCommandInput, ResendConfirmationCodeCommand, ResendConfirmationCodeCommandInput, SignUpCommand, SignUpCommandInput, UpdateUserAttributesCommand, UpdateUserAttributesCommandInput
 } from "@aws-sdk/client-cognito-identity-provider";
-import moment from "moment";
-import { APP_CONIFG } from "../config/AppConfig";
-import { AccountStatus } from "../enums/AccountStatus";
-import { AccountType } from "../enums/AccountType";
-import { LoginModel, UpdateUserModel } from "../interfaces";
-import { ChangePasswordModel } from "../interfaces/ChangePasswordModel";
-import { ConfirmationResendModel } from "../interfaces/ConfirmationResendModel";
-import { PagingModel } from "../interfaces/PagingModel";
-import { User } from "../interfaces/User";
-import { ConfirmCodeModel, CreateUserModel } from "../models";
+import { DateTime } from "luxon";
+import { APP_CONIFG } from "../config/AppConfig.mjs";
+import { AccountStatus } from "../enums/AccountStatus.mjs";
+import { AccountType } from "../enums/AccountType.mjs";
+import { ChangePasswordModel } from "../interfaces/ChangePasswordModel.mjs";
+import { ConfirmationResendModel } from "../interfaces/ConfirmationResendModel.mjs";
+import { LoginModel, UpdateUserModel } from "../interfaces/index.mjs";
+import { PagingModel } from "../interfaces/PagingModel.mjs";
+import { User } from "../interfaces/User.mjs";
+import { ConfirmCodeModel, CreateUserModel } from "../models/index.mjs";
 
 
 export class UserManager {
@@ -70,6 +70,8 @@ export class UserManager {
 
         const tempResult = await this._client.send(command);
 
+        const today = DateTime.now();
+
         console.log('### tempResult ###', tempResult);
         const result: User[] = [];
 
@@ -81,9 +83,10 @@ export class UserManager {
             phoneNumber: "",
             password: "",
             active: false,
-            accountType: AccountType.Client,
+            accountType: AccountType.USER,
             emailVerified: false,
-            createdOn: new Date(),
+            createdOn: today.toISODate(),
+            createOnTS: today.valueOf(),
             status: AccountStatus.NeedConfirmation
         };
 
@@ -102,7 +105,7 @@ export class UserManager {
                         user.email = y.Value!;
                         break;
                     case "custom:acccountType":
-                        user.accountType = parseInt(y.Value!) || AccountType.Client;
+                        user.accountType = parseInt(y.Value!) || AccountType.USER;
                         break;
 
                     case "email_verified":
@@ -122,7 +125,7 @@ export class UserManager {
                         break;
 
                     case "custom:joinedOn":
-                        user.createdOn = moment(y.Value!).toDate();
+                        user.createdOn = today.toISODate();
                         break;
                 }
             });
@@ -136,9 +139,10 @@ export class UserManager {
                 lastName: "",
                 phoneNumber: "",
                 password: "",
-                accountType: AccountType.Client,
+                accountType: AccountType.USER,
                 emailVerified: false,
-                createdOn: new Date(),
+                createdOn: today.toISODate(),
+                createOnTS: today.valueOf(),
                 active: false,
                 status: AccountStatus.NeedConfirmation,
             };
@@ -243,12 +247,11 @@ export class UserManager {
                 },
                 {
                     Name: 'custom:phoneNumber',
-                    Value: `1${model.phoneNumber.replace("-", "").replace("(", "").replace(")", "").replace(".", "")}`
+                    Value: `1${model.phoneNumber.replace(/\-/, "").replace(/\(/, "").replace(/\)/, "").replace(/\./, "")}`
                 },
                 {
                     Name: 'custom:joinedOn',
-                    // @ts-ignore
-                    Value: moment().utc().format("YYYY-MM-DD hh:mm:ss z")
+                    Value: DateTime.now().toUTC().toFormat("YYYY-MM-DD hh:mm:ss z")
                 },
                 {
                     Name: 'custom:acccountType',
