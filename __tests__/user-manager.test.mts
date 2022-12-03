@@ -1,10 +1,10 @@
 import * as env from "dotenv";
 
-import { UserManager } from "../app/src/classes/UserManager.mjs";
-import { AccountHelper } from "../app/src/helpers/account-helper.mjs";
-import { CreateUserModel } from "../app/src/models/index.mjs";
+import { UserManager } from "../app/classes/UserManager.mjs";
+import { AccountHelper } from "../app/helpers/account-helper.mjs";
+import { CreateUserModel } from "../app/models/CreateUserModel.mjs";
 
-let userManager;
+let userManager: UserManager;
 
 beforeAll(() => {
   env.config();
@@ -15,7 +15,7 @@ describe('Account Creation', () => {
 
   test('Create a user account', async () => {
 
-    const data = AccountHelper.CreateAccountData();
+    const data: CreateUserModel = AccountHelper.CreateAccountData();
 
     const result = await userManager.createAccount(data);
 
@@ -26,8 +26,8 @@ describe('Account Creation', () => {
   it.skip('Create Account', async () => {
 
 
-    const userManager = new UserManager();
-    const model2 = AccountHelper.CreateAccountData();
+    const userManager: UserManager = new UserManager();
+    const model2: CreateUserModel = AccountHelper.CreateAccountData();
 
 
     let result;
@@ -47,13 +47,13 @@ describe('Account Creation', () => {
 
     const userManager = new UserManager();
 
-    const model2 = AccountHelper.CreateAccountData();
+    const model2: CreateUserModel = AccountHelper.CreateAccountData();
 
     try {
       const result = await userManager.createAccount(model2);
       expect(result.$metadata.httpStatusCode).not.toBe(200);
 
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
 
@@ -71,7 +71,7 @@ describe('Account Creation', () => {
 
       expect(result.length).toBe(1);
 
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
 
@@ -90,7 +90,7 @@ describe('Account Creation', () => {
 
       expect(result.$metadata.httpStatusCode).toBe(200);
 
-    } catch (err) {
+    } catch (err: any) {
 
 
       console.log(err);
