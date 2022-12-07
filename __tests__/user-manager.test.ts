@@ -1,8 +1,8 @@
 import * as env from "dotenv";
 
-import { UserManager } from "../app/classes/UserManager.mjs";
-import { AccountHelper } from "../app/helpers/account-helper.mjs";
-import { CreateUserModel } from "../app/models/CreateUserModel.mjs";
+import { UserManager } from "../src/classes/UserManager.mjs";
+import { AccountHelper } from "../src/helpers/account-helper.mjs";
+import { CreateUserModel } from "../src/models/CreateUserModel.mjs";
 
 let userManager: UserManager;
 

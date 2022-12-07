@@ -1,28 +1,28 @@
-import type { Config } from '@jest/types';
-import { pathsToModuleNameMapper } from 'ts-jest';
-import {defaults} from 'jest-config';
-import tsconfigJson from './tsconfig.json';
+import type { JestConfigWithTsJest } from 'ts-jest'
 
-const config: Config.InitialOptions = {
-    preset: 'ts-jest/presets/default-esm',
-    testEnvironment: 'node',
-    verbose: true,
-    globals: {
-        'ts-jest': {
-            tsconfig: './tsconfig.json',
-            useESM: true
-        }
-    },
-    transform: {},
-    moduleFileExtensions: [...defaults.moduleFileExtensions, 'mts'],
-    // moduleNameMapper: pathsToModuleNameMapper(tsconfigJson.compilerOptions.paths, { prefix: '<rootDir>/' }),
-    transformIgnorePatterns: ['<rootDir>/node_modules/'],
-    "testMatch": [
-        // "__tests__/**/*.mts",
-        "__tests__/*.mts",
-        // '**/__tests__/**/*.mjs',
-      ]
-};
-export default config;
+const jestConfig: JestConfigWithTsJest = {
+  // [...]
+  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  testMatch: [
+    "<rootDir>/**/*.(test).{js,jsx,ts,tsx}",
+    "<rootDir>/__tests__/**/?(*.)(spec|test).{js,jsx,ts,tsx,mts}"
+  ],
+  testPathIgnorePatterns: ["node_modules"], 
+  extensionsToTreatAsEsm: ['.ts', '.mts'],
+  transform: {
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    '^.+\\.m?[tj]sx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
+  resolver: '<rootDir>/mjs-resolver.ts',
+}
 
-
+export default jestConfig
