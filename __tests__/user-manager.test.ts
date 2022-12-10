@@ -1,5 +1,5 @@
 import * as env from "dotenv";
-
+env.config();
 import { UserManager } from "../src/classes/UserManager.mjs";
 import { AccountHelper } from "../src/helpers/account-helper.mjs";
 import { CreateUserModel } from "../src/models/CreateUserModel.mjs";
@@ -7,13 +7,13 @@ import { CreateUserModel } from "../src/models/CreateUserModel.mjs";
 let userManager: UserManager;
 
 beforeAll(() => {
-  env.config();
+
   userManager = new UserManager();
 });
 
 describe('Account Creation', () => {
 
-  test('Create a user account', async () => {
+  test.skip('Create a user account', async () => {
 
     const data: CreateUserModel = AccountHelper.CreateAccountData();
 
@@ -64,17 +64,18 @@ describe('Account Creation', () => {
 
     const service = new UserManager();
 
+    let actual = 0;
 
     try {
       const result = await service.getUsers();
       console.log('result', result);
 
-      expect(result.length).toBe(1);
+      actual = result?.length || 0;
 
     } catch (err: any) {
       console.log(err);
     }
-
+    expect(actual).toEqual(2);
   });
 
   it.skip('Confirm Accounts', async () => {

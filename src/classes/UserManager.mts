@@ -54,7 +54,7 @@ export class UserManager {
                 nextPageToken: "",
             };
         }
-        console.log('USER POOL ID', APP_CONIFG.USER_POOL_ID);
+        console.log('USER POOL ID', APP_CONIFG);
 
         const commandInput: ListUsersCommandInput = {
             UserPoolId: APP_CONIFG.USER_POOL_ID,
@@ -62,12 +62,8 @@ export class UserManager {
             PaginationToken: (model.nextPageToken) ? model.nextPageToken : undefined
         };
 
-        console.log('commandInput', commandInput);
-
         const command = new ListUsersCommand(commandInput);
-
-        console.log('command', command);
-
+try {
         const tempResult = await this._client.send(command);
 
         const today = DateTime.now();
@@ -124,9 +120,9 @@ export class UserManager {
                         user.phoneNumber = y.Value!;
                         break;
 
-                    case "custom:joinedOn":
-                        user.createdOn = today.toISODate();
-                        break;
+                    // case "custom:joinedOn":
+                    //     user.createdOn = today.toISODate();
+                    //     break;
                 }
             });
 
@@ -149,6 +145,11 @@ export class UserManager {
         });
 
         return result;
+
+    } catch (err) {
+        console.log('Error: ', err)
+    }
+
     }
 
     public async confirmAccount(username: string) {

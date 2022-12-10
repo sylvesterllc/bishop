@@ -10,8 +10,16 @@ const jestConfig: JestConfigWithTsJest = {
     "<rootDir>/**/*.(test).{js,jsx,ts,tsx}",
     "<rootDir>/__tests__/**/?(*.)(spec|test).{js,jsx,ts,tsx,mts}"
   ],
+  
   testPathIgnorePatterns: ["node_modules"], 
   extensionsToTreatAsEsm: ['.ts', '.mts'],
+  // transformIgnorePatterns: [
+  //   `/node_modules/(?!(somePkg)|react-dnd|core-dnd|@react-dnd|@sylvesterllc/utility-helper)`,
+  // ],
+  transformIgnorePatterns: [
+    '/node_modules/@sylvesterllc/(?!utility-helper)',
+    
+  ],
   transform: {
     // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
     // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
